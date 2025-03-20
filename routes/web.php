@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Category;
 use App\Models\Product;
 
+
 Route::middleware("guest:user")->group(function() {
     Route::get("register", [RegisterUserController::class, "create"])->name("");
     Route::post("register", [RegisterUserController::class, "store"])->name("register");
