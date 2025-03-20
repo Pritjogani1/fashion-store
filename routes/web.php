@@ -42,6 +42,8 @@ Route::get('/men/{category?}',[Homepage::class,'men'])->name('men');
 
 
 
+
+
 Route::prefix("admin")->group(function() {
 
     Route::middleware("guest:admin")->group(function() {
@@ -56,7 +58,7 @@ Route::prefix("admin")->group(function() {
 
 });
 
-
+// Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::get('/admin/customers', [AdminController::class, 'customers'])->name('admin.customers');
 
 Route::get('/admin/categories',[CategoryController::class,'index'])->name('admin.categories.index');
