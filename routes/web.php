@@ -60,6 +60,7 @@ Route::prefix("admin")->group(function() {
 
 // Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 // Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
+// Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
 
 Route::get('/admin/customers', [AdminController::class, 'customers'])->name('admin.customers');
 
@@ -68,8 +69,8 @@ Route::post('/admin/categories',[CategoryController::class,'store'])->name('admi
 Route::delete('/admin/categories/{category}',[CategoryController::class,'destroy'])->name('admin.categories.destroy');
 
 
-
 Route::get('/admin/products',[ProductController::class,'allproducts'])->name('admin.products');
+
 Route::get('/admin/addproducts',[ProductController::class,'addproduct'])->name('admin.addproduct');
 
 // Change this route to use 'store' instead of 'create'
