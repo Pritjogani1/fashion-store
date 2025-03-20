@@ -59,6 +59,7 @@ Route::prefix("admin")->group(function() {
 });
 
 // Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
 Route::get('/admin/customers', [AdminController::class, 'customers'])->name('admin.customers');
 
 Route::get('/admin/categories',[CategoryController::class,'index'])->name('admin.categories.index');
