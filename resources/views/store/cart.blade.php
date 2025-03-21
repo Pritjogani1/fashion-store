@@ -11,6 +11,7 @@
                     </div>
 
                     @forelse($cart as $item)
+                    
                         <div class="flex items-center border-b border-gray-200 pb-5">
                             <div class="flex w-2/5 items-center gap-4">
                                 <img class="h-24 w-24 rounded-lg object-cover" src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}">
@@ -25,7 +26,9 @@
                                 <button class="text-gray-700 hover:text-black" onclick="updateQuantity({{ $item['id'] }}, 'increase')">➕</button>
                             </div>
                             <span class="w-1/5 text-lg font-medium">₹{{ $item['price'] }}</span>
-                            <span class="w-1/5 text-lg font-medium item-total">₹{{ $item['price'] * $item['quantity'] }}</span>
+                            <span id="item-total" class="w-1/5 text-lg font-medium item-total">₹{{ $item['price'] * $item['quantity'] }}</span>
+
+
                         </div>
                     @empty
                         <div class="text-center py-12">
@@ -44,8 +47,9 @@
                     <div class="flex justify-between text-xl font-bold">
                         <span>Total</span>
                         <span id="cart-total">₹{{ $cartTotal }}</span>
+                        
                     </div>
-                    <button class="w-full mt-8 bg-black text-white py-3 rounded-xl hover:bg-gray-800 transform transition duration-200 hover:scale-105">
+                    <button onclick="window.location.href='{{ route('checkout') }}'" class="w-full mt-8 bg-black text-white py-3 rounded-xl hover:bg-gray-800 transform transition duration-200 hover:scale-105">
                         Proceed to Checkout
                     </button>
                 </div>
@@ -76,8 +80,7 @@
         if (newQuantity !== currentQuantity) {
             $.post('/cart/update', { id: productId, quantity: newQuantity }, function(response) {
                 quantityInput.value = newQuantity;
-                updateCartDisplay(response);
-                showToast('Quantity updated successfully ✅','green');
+                updateCartDisplay(response).showToast('Quantity updated successfully ✅','green');
             }).fail(function() {
                 showToast('Error updating quantity ❌', 'red');
             });
@@ -95,11 +98,15 @@
 
     function updateCartDisplay(response) {
         $('#cart-total').text('₹' + response.cartTotal);
+       
+
         $('#total-items').text(Object.values(response.cart).reduce((total, item) => total + item.quantity, 0));
 
         Object.entries(response.cart).forEach(([id, item]) => {
             const itemTotal = item.price * item.quantity;
+            
             $(`[data-id="${id}"]`).closest('.flex').find('.item-total').text('₹' + itemTotal);
+            return itemTotal;
         });
     }
     </script>

@@ -20,6 +20,7 @@
         <!-- Products Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($products as $product)
+          
                 <div class="bg-white rounded-lg shadow-md overflow-hidden product" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">
                     <img src="{{ asset('storage/' . $product->image) }}" 
                          alt="{{ $product->name }}" 

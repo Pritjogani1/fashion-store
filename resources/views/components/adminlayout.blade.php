@@ -8,19 +8,43 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/toasty.js@1.0.1/dist/toasty.min.js"></script>
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="bg-gray-100">
     <div class="flex">
         <!-- Sidebar -->
         <aside class="w-64 bg-black text-white min-h-screen">
             {{ $sidebar ?? '' }}
-            <nav class="p-4">
-                <ul class="space-y-2">
-                    <li><a href="{{ route('admin.dashboard') }}" class="block py-2 px-4 hover:bg-gray-700 rounded">Dashboard</a></li>
-                    <li><a href="{{ route('admin.products') }}" class="block py-2 px-4 hover:bg-gray-700 rounded">Products</a></li>
-                    <li><a href="{{ route('admin.categories.index') }}" class="block py-2 px-4 hover:bg-gray-700 rounded">Categories</a></li>
-                    <li><a href="{{ route('admin.customers') }}" class="block py-2 px-4 hover:bg-gray-700 rounded">Customers</a></li>
-                    <li><a href="{{ route('admin.logout') }}" class="block py-2 px-4 hover:bg-gray-700 rounded">Logout</a></li>
+            <nav class="bg-gray-800 text-white w-64 p-6">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold">Admin Panel</h1>
+                </div>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}" class="block py-2 px-4 rounded hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700' : '' }}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.products') }}" class="block py-2 px-4 rounded hover:bg-gray-700 {{ request()->routeIs('admin.products') ? 'bg-gray-700' : '' }}">
+                            Products
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.categories.index') }}" class="block py-2 px-4 rounded hover:bg-gray-700 {{ request()->routeIs('admin.categories.*') ? 'bg-gray-700' : '' }}">
+                            Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.orders') }}" class="block py-2 px-4 rounded hover:bg-gray-700 {{ request()->routeIs('admin.orders') ? 'bg-gray-700' : '' }}">
+                            Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.customers') }}" class="block py-2 px-4 rounded hover:bg-gray-700 {{ request()->routeIs('admin.customers') ? 'bg-gray-700' : '' }}">
+                            Customers
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -70,5 +71,30 @@ public function updateUser(Request $request, $id)
 
     $user->update($validatedData);
     return redirect()->route('admin.customers')->with('success', 'Customer updated successfully');
+}
+
+public function orders()
+{
+   
+    $orders = Order::with(['user', 'items'])->latest()->get();
+    
+    return view('admin.admin-orders', compact('orders'));
+}
+
+public function orderDetails(Order $order)
+{
+    $order->load(['user', 'items']);
+    return view('admin.order-details', compact('order'));
+}
+
+public function updateOrderStatus(Request $request, $orderId)
+{
+    $order = Order::findOrFail($orderId);
+    $order->update(['status' => $request->status]);
+    
+    return response()->json([
+        'success' => true,
+        'message' => 'Order status updated successfully'
+    ]);
 }
 }

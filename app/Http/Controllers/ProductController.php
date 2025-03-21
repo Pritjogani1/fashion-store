@@ -44,7 +44,7 @@ class ProductController extends Controller
             'slug' => $request->slug,
             'image' => $imagePath,
             'description' => $request->description,
-            'sub_category' => $request->sub_category
+          
         ]);
 
         // Attach categories
@@ -98,5 +98,22 @@ class ProductController extends Controller
         $products = $category->products()->paginate(12);
         return view('products.category', compact('category', 'products'));
     }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        
+        // Delete the product image from storage if it exists
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
+        
+        // Delete the product and its relationships
+        $product->categories()->detach();
+        $product->delete();
+        
+        return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
+    }
+    
 }
    

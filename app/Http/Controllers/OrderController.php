@@ -2,43 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\OrderService;
 use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function index()
+    protected $orderService;
+
+    public function __construct(OrderService $orderService)
     {
-        return response()->json(Order::all());
+        $this->orderService = $orderService;
+    
     }
 
-    public function store(Request $request)
+    public function checkout()
     {
-        $order = Order::create([
-            'user_id' => $request->user_id,
-            'status' => $request->status,
-            'total' => $request->total,
+        if (!session()->has('cart') || empty(session('cart'))) {
+            return redirect()->route('cart.show')->with('error', 'Your cart is empty');
+        }
+        return view('store.checkout');
+    }
+
+    public function storeAddress(Request $request)
+    {
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'full_name' => 'required',
+            'address_line' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'pincode' => 'required',
+            'phone' => 'required',
+            'country' => 'required',
         ]);
+       
 
-        return response()->json($order, 201);
+   $address =   $this->orderService->storeAddress($validatedData);
+   
+        return redirect()->route('order.confirm');
     }
 
-    public function show($id)
+    public function confirmOrder()
     {
-        return response()->json(Order::findOrFail($id));
+        
+        if (!session()->has('checkout_address')) {
+        
+            return redirect()->route('checkout')->with('error', 'Please provide shipping address');
+        }
+        
+        $data = $this->orderService->getCheckoutData();
+        return view('store.confirm-order', ['data' => $data]);
     }
 
-    public function update(Request $request, $id)
+    public function placeOrder()
     {
-        $order = Order::findOrFail($id);
-        $order->update($request->all());
-        return response()->json($order);
+        
+        try {
+            
+            if (!session()->has('cart') || empty(session('cart'))) {
+               
+                return redirect()->route('cart.show')->with('error', 'Your cart is empty');
+              
+            }
+
+            if (!session()->has('checkout_address')) {
+               
+                return redirect()->route('checkout')->with('error', 'Please provide shipping address');
+               
+            }
+
+            $order = $this->orderService->createOrder();
+           
+            session()->forget(['cart', 'checkout_address']);
+            
+            return redirect()->route('order.success', $order->id)
+                           ->with('success', 'Order placed successfully!');
+        } catch (\Exception $e) {
+           
+            return redirect()->back()
+                           ->with('error', 'Failed to place order. Please try again.');
+        }
     }
 
-    public function destroy($id)
+    public function orderSuccess($orderId)
     {
-        Order::destroy($id);
-        return response()->json(['message' => 'Order deleted']);
+        $order = Order::with('items')->findOrFail($orderId);
+        return view('store.order-success', compact('order'));
     }
 }

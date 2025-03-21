@@ -4,32 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Services\CartService;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
+    protected $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
     public function addToCart(Request $request, $product)
     {
         $productModel = Product::findOrFail($product);
-        $cart = session()->get('cart', []);
+        $result = $this->cartService->addToCart($productModel);
         
-        if (isset($cart[$productModel->id])) {
-            $cart[$productModel->id]['quantity'] += 1;
-        } else {
-            $cart[$productModel->id] = [
-                'name' => $productModel->name,
-                'price' => $productModel->price,
-                'quantity' => 1,
-                'image' => $productModel->image,
-                'id' => $productModel->id
-            ];
-        }
-
-        session()->put('cart', $cart);
         return response()->json([
             'message' => 'Product added to cart successfully!',
-            'cart' => $cart,
-            'cartTotal' => $this->calculateCartTotal($cart)
+            'cart' => $result['cart'],
+            'cartTotal' => $result['cartTotal'],
+           
         ]);
     }
 
@@ -44,23 +40,19 @@ class CartController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $cart = session()->get('cart', []);
-        $productId = $request->id;
+        $result = $this->cartService->updateCart($request->id, $request->quantity);
         
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] = $request->quantity;
-            session()->put('cart', $cart);
-            return response()->json([
-                'message' => 'Cart updated successfully!',
-                'cart' => $cart,
-                'cartTotal' => $this->calculateCartTotal($cart),
-                'totalItems' => array_reduce($cart, function($total, $item) {
-                    return $total + $item['quantity'];
-                }, 0)
-            ]);
+        if (!$result) {
+            return response()->json(['error' => 'Product not found in cart'], 404);
         }
 
-        return response()->json(['error' => 'Product not found in cart'], 404);
+        return response()->json([
+            'message' => 'Cart updated successfully!',
+            'cart' => $result['cart'],
+            'cartTotal' => $result['cartTotal'],
+            'totalItems' => $result['totalItems'],
+        
+        ]);
     }
 
     public function removeFromCart(Request $request)
@@ -73,46 +65,34 @@ class CartController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $cart = session()->get('cart', []);
-        $productId = $request->id;
-
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
-            session()->put('cart', $cart);
-            return response()->json([
-                'message' => 'Product removed from cart successfully!',
-                'cart' => $cart,
-                'cartTotal' => $this->calculateCartTotal($cart)
-            ]);
+        $result = $this->cartService->removeFromCart($request->id);
+        
+        if (!$result) {
+            return response()->json(['error' => 'Product not found in cart'], 404);
         }
 
-        return response()->json(['error' => 'Product not found in cart'], 404);
+        return response()->json([
+            'message' => 'Product removed from cart successfully!',
+            'cart' => $result['cart'],
+            'cartTotal' => $result['cartTotal'],
+  
+        ]);
     }
 
     public function showCart()
     {
-        $cart = session()->get('cart', []);
-        $cartTotal = $this->calculateCartTotal($cart);
-        $totalItems = array_reduce($cart, function($total, $item) {
-            return $total + $item['quantity'];
-        }, 0);
-        return view('store.cart', compact('cart', 'cartTotal', 'totalItems'));
+        $result = $this->cartService->getCartDetails();
+        return view('store.cart', $result);
     }
 
     public function clearCart()
     {
-        session()->forget('cart');
+        $result = $this->cartService->clearCart();
         return response()->json([
             'message' => 'Cart cleared successfully!',
-            'cart' => [],
-            'cartTotal' => 0
+            'cart' => $result['cart'],
+            'cartTotal' => $result['cartTotal'],
+            
         ]);
-    }
-
-    private function calculateCartTotal($cart)
-    {
-        return array_reduce($cart, function($total, $item) {
-            return $total + ($item['price'] * $item['quantity']);
-        }, 0);
     }
 }

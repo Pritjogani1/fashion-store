@@ -9,7 +9,7 @@ class Address extends Model
 {
     /** @use HasFactory<\Database\Factories\AddressFactory> */
     use HasFactory;
-    protected $fillable = ['user_id', 'address_line', 'city', 'state', 'country', 'postal_code', 'type'];
+    protected $guarded = [];
 
     public function user()
     {

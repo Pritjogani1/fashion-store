@@ -1,3 +1,4 @@
+
 <x-adminlayout>
     <main class="flex-1 p-6">
         <div class="flex justify-between items-center mb-6">
@@ -20,11 +21,12 @@
                 </thead>
                 <tbody>
                @foreach($products as $product)
+           
                     <tr class="border-b">
                         <td class="p-3">{{$product->id}}</td>
                         <td class="p-3">{{$product->name}}</td>
                         <td class="p-3">₹{{$product->price}}</td>
-                        <td class="p-3"><img src="{{asset('storage/'.$product->image)}}" alt="" width="100px" height="100px"></td>
+                        <td class="p-3"><img src="{{asset('/storage/'. $product->image)}}" alt="imgae not foune" width="100px" height="100px"></td>
                         <td class="p-3">{{$product->description}}</td>
                         <td class="p-3">
                             @foreach($product->categories as $category)
