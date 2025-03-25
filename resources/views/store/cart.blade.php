@@ -98,7 +98,6 @@
 
     function updateCartDisplay(response) {
         $('#cart-total').text('₹' + response.cartTotal);
-       
 
         $('#total-items').text(Object.values(response.cart).reduce((total, item) => total + item.quantity, 0));
 

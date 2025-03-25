@@ -48,7 +48,8 @@ class OrderService
             'pincode' => $address['pincode'],
             'phone' => $address['phone'],
             'country' => $address['country'],
-            'type' => 'shipping'
+            'type' => 'shipping',
+            'order_id' => $order->id,
         ]);
       
        

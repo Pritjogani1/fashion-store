@@ -48,6 +48,11 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+        function updateCartCount(cart) {
+            const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+            $('#cart-count').text(itemCount);
+        }
+
         $('.add-to-cart').click(function(e) {
             e.preventDefault();
             const productId = $(this).data('id');
@@ -77,13 +82,6 @@ $.ajaxSetup({
                 }
             });
         });
-
-        function updateCartCount(cart) {
-            const itemCount = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
-            $('#cart-count').text(itemCount);
-        }
-        
-        });
-    
-    </script>
+    });
+</script>
 </x-layout>

@@ -1,4 +1,4 @@
-<footer class="bg-black text-white py-10">
+{{-- <footer class="bg-black text-white py-10">
     <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- Logo & Description -->
         <div>
@@ -43,4 +43,6 @@
     <div class="mt-10 border-t border-gray-700 pt-5 text-center text-gray-400">
         <p>&copy; 2025 FashionStore. All rights reserved.</p>
     </div>
-</footer>
+</footer> --}}
+
+{!! getBlock('footer')->content ?? '' !!}

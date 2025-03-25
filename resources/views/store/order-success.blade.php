@@ -14,11 +14,11 @@
                     <!-- Shipping Details -->
                     <div class="border rounded-lg p-4">
                         <h3 class="font-semibold mb-2">Shipping Details</h3>
-                        <p>{{ $order->full_name }}</p>
-                        <p>{{ $order->address_line }}</p>
-                        <p>{{ $order->city }}, {{ $order->state }} {{ $order->pincode }}</p>
-                        <p>{{ $order->country }}</p>
-                        <p>Phone: {{ $order->phone }}</p>
+                        <p>{{ $order->address->full_name }}</p>
+                        <p>{{ $order->address->address_line }}</p>
+                        <p>{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->pincode }}</p>
+                        <p>{{ $order->address->country }}</p>
+                        <p>Phone: {{ $order->address->phone }}</p>
                     </div>
 
                     <!-- Order Info -->
@@ -26,7 +26,7 @@
                         <h3 class="font-semibold mb-2">Order Information</h3>
                         <p>Order Date: {{ $order->created_at->format('d M, Y') }}</p>
                         <p>Status: <span class="capitalize">{{ $order->status }}</span></p>
-                        <p>Total Amount: ₹{{ $order->total_amount }}</p>
+                        <p>Total Amount: ₹{{ $order->total }}</p>
                     </div>
                 </div>
             </div>

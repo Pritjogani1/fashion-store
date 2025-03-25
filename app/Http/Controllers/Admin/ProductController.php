@@ -1,30 +1,48 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Exception;
 
 
 class ProductController extends Controller
 {
+    
     public function allproducts()
     {
+        try{
         $products = Product::all();
         return view('admin.admin-products', compact('products'));
+        }
+        catch(Exception $e) {
+            return back()->withErrors([
+               'message' => 'An error occurred while fetching the products.',
+            ]);
+        }
     }
     public function addproduct()
     {
+        try{
         $categories = Category::all();
         return view('admin.admin-addproduct', compact('categories'));
+        }   
+        catch(Exception $e) {
+            return back()->withErrors([
+               'message' => 'An error occurred while fetching the categories.',
+            ]);
+        }
     }
 
     // Change this method name from 'create' to 'store'
     public function store(Request $request)
     {
+        try{
         $validatedData = $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
@@ -51,17 +69,31 @@ class ProductController extends Controller
         $product->categories()->attach($request->categories);
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully');
+        }
+        catch(Exception $e) {
+            return back()->withErrors([
+              'message' => 'An error occurred while adding the product.',
+            ]);
+        }
     }
 
     public function editproduct($id)
     {
+        try{
         $product = Product::with('categories')->findOrFail($id);
         $categories = Category::all();
         return view('admin.admin-editproduct', compact('product', 'categories'));
+        }
+        catch(Exception $e) {
+            return back()->withErrors([
+             'message' => 'An error occurred while fetching the product.',
+            ]);
+        }
     }
 
     public function update(Request $request, $id)
     {
+        try{
         $product = Product::findOrFail($id);
         
         $validatedData = $request->validate([
@@ -92,15 +124,30 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
     }
+    catch(Exception $e) {
+        return back()->withErrors([
+         'message' => 'An error occurred while updating the product.',
+        ]); 
+    }
+}
 
     public function byCategory(Category $category)
     {
+        try{
         $products = $category->products()->paginate(12);
         return view('products.category', compact('category', 'products'));
-    }
+        }
+        catch(Exception $e) {
+            return back()->withErrors([
+            'message' => 'An error occurred while fetching the products.',              
+            ]);
+        }    
+        }
+        
 
     public function destroy($id)
     {
+        try{
         $product = Product::findOrFail($id);
         
         // Delete the product image from storage if it exists
@@ -113,6 +160,13 @@ class ProductController extends Controller
         $product->delete();
         
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
+    }
+
+catch(Exception $e) {
+    return back()->withErrors([
+       'message' => 'An error occurred while deleting the product.',
+    ]);
+}
     }
     
 }

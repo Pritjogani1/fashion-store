@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 
@@ -39,6 +39,7 @@ class SessionController extends Controller
     
     public function authenticate(AuthRequest $request) {
         
+        try{
             $credentials = $request->only(["email", "password"]);
             
             if(Auth::guard("user")->attempt($credentials)) {
@@ -50,14 +51,26 @@ class SessionController extends Controller
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
 
-        
+            }
+            catch(\Exception $e) {
+                return back()->withErrors([
+                   'message' => 'An error occurred while authenticating the user.',
+                ]);
+            }
     }
 
     public function logout()
     {
+        try{
         session()->forget('cart');
         Auth::guard('user')->logout();
         return redirect('/')->with('success', 'Goodbye!');
+        }
+        catch(\Exception $e) {
+            return back()->withErrors([
+              'message' => 'An error occurred while logging out.',
+            ]);
+        }
     }
 
 
@@ -70,9 +83,17 @@ class SessionController extends Controller
 
     public function update(Request $request, $id)
     {
+        try{
         $user = User::findOrFail($id);
         $user->update($request->all());
         return response()->json($user);
+        }
+        catch(\Exception $e) {
+            return response()->json([
+               'success' => false,
+               'message' => 'An error occurred while updating the user.'
+                    ]);
+        }
     }
 
 

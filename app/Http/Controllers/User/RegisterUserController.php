@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,6 +15,7 @@ class RegisterUserController extends Controller
     }
     public function store(Request $request)
     {
+        try{
       
      $attributes = $request->validate([
             'name'=>'required',
@@ -27,5 +28,12 @@ class RegisterUserController extends Controller
         Auth::login($user);
         return redirect('/dashboard');
     }   
+
+catch(\Exception $e) {
+    return back()->withErrors([
+       'message' => 'An error occurred while creating the user.',
+    ]);
+}
+    }
 
 }

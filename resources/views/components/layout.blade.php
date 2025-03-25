@@ -105,7 +105,16 @@
         <a href="/" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black pt-20">Home</a>
         <a href="/about" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black ">About</a>
         <a href="/products" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black ">Products</a>
-        <a href="/login" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black ">login</a>
+        <a href="/login" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-bla<!-- ... existing nav code ... -->
+<a href="{{ route('cart.show') }}" class="relative inline-block">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+    </svg>
+    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+        {{ session()->has('cart') ? array_sum(array_column(session('cart'), 'quantity')) : '0' }}
+    </span>
+</a>
+<!-- ... existing nav code ... -->k ">login</a>
         <a href="/logout" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black pb-0">logout</a>
         
         

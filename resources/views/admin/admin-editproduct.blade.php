@@ -1,7 +1,21 @@
 <x-adminlayout>
     <main class="flex-1 p-6">
-        <h2 class="text-3xl font-semibold mb-6">Edit Product</h2>
+
+        <div class=" ">
+            <h1 class="text-3xl font-semibold ">Edit Product</h1>
+            <div class="flex justify-end mb-4">
+                <a href="{{ route('admin.products') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Products
+                </a>
+            </div>
+        </div>
+       
+
         <div class="bg-white p-6 rounded-lg shadow-md">
+         
             <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

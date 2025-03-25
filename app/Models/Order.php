@@ -11,6 +11,11 @@ class Order extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -20,4 +25,5 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
 }
