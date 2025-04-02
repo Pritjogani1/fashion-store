@@ -11,6 +11,7 @@
 
 <!-- Add Toasty JS -->
 <script src="https://cdn.jsdelivr.net/npm/toasty.js@1.0.1/dist/toasty.min.js"></script>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
 
@@ -73,7 +74,12 @@
                         </div>
                     </div>
                 </div>
-                
+              <!-- Add this in your navigation bar -->
+    <div class="relative">
+        <input type="text" id="global-search-input" class="w-64 px-4 py-2 rounded-full border text-amber-50" placeholder="Search products...">
+        <div id="global-search-results" class="absolute z-50 mt-2 w-full bg-white rounded-lg shadow-lg hidden"></div>
+    </div>
+
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
                     <button id="menu-btn" class="text-white focus:outline-none">
@@ -114,11 +120,12 @@
         {{ session()->has('cart') ? array_sum(array_column(session('cart'), 'quantity')) : '0' }}
     </span>
 </a>
-<!-- ... existing nav code ... -->k ">login</a>
+<a href="/login" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black pb-0">login</a>
         <a href="/logout" class="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black pb-0">logout</a>
         
         
     </div>
+    
     
     <div class="pt-20">
         {{$slot}}
@@ -171,6 +178,7 @@
             @endforeach
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     
     <!-- Add this script at the bottom of the body -->
     <script>
@@ -193,5 +201,10 @@
             }
         });
     </script>
+
+  
+
+    <!-- Add this before the closing </body> tag -->
+  
 </body>
 </html>

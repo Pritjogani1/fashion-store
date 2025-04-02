@@ -7,6 +7,7 @@ use App\Services\OrderService;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\OrderPlaced;
 
 class OrderController extends Controller
 {
@@ -100,6 +101,7 @@ class OrderController extends Controller
     {
         try{
         $order = Order::with('items')->findOrFail($orderId);
+        event(new OrderPlaced($order));
         return view('store.order-success', compact('order'));
         }
         catch(\Exception $e) {

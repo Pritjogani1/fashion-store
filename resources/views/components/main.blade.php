@@ -1,12 +1,15 @@
 <body class="bg-gray-100 text-gray-900 ">
+  
+
     <!-- Hero Section -->
-    <section class="relative w-full h-screen bg-cover bg-center" style="background-image: url('https://www.shutterstock.com/image-photo/modern-fashion-store-front-downtown-600nw-2215294089.jpg');">
+    <section class="relative w-full h-screen bg-cover bg-center" style="background-image: url('{{Vite::asset('resources/images/herosectionimg.jpg')}}');">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center">
             <h1 class="text-6xl font-extrabold drop-shadow-lg">Discover Your Unique Style</h1>
             <p class="text-lg mt-4 max-w-3xl">"Fashion is the art of self-expression. Wear what makes you feel confident and alive."</p>
             <a href="#collections" class="mt-6 px-8 py-4 bg-white text-gray-900 font-semibold rounded-full shadow-md hover:bg-gray-200 transition">Shop Now</a>
         </div>
     </section>
+    {{-- {!! getBlock('hero-section')->content ?? null !!} --}}
 
     
 
@@ -48,7 +51,7 @@
 
         </div>
     </section>
-
-
-
 </body>
+
+
+

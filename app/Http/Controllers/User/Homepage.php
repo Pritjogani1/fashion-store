@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class Homepage extends Controller
 {
     public function index()
-    {try{
+    {
+                                      try{
         return view('store.home');
     }
     catch(\Exception $e) {

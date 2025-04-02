@@ -168,6 +168,28 @@ catch(Exception $e) {
     ]);
 }
     }
+  
+         
     
+    public function preview(Product $product)
+{
+   
+    // Check if the product has a category relationship
+    if ($product->category) {
+        $similarProducts = Product::where('category', $product->category)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+    } else {
+        // Fallback to get random products if no category is found
+        $similarProducts = Product::where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+    }
+
+    return view('products.preview', compact('product', 'similarProducts'));
+}
 }
    

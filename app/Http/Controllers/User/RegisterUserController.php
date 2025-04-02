@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Events\UserRegistered;
 
 class RegisterUserController extends Controller
 {
@@ -26,7 +27,8 @@ class RegisterUserController extends Controller
         ]);
       $user =   User::create($attributes);
         Auth::login($user);
-        return redirect('/dashboard');
+        event(new UserRegistered($user));
+        return redirect('/');
     }   
 
 catch(\Exception $e) {
