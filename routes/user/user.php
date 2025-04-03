@@ -48,7 +48,8 @@ Route::middleware("auth:user")->group(function() {
 
     // Checkout and Order routes
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::post('/checkout/address', [OrderController::class, 'storeAddress'])->name('checkout.address');
+    Route::post('/checkout/address', [OrderController::class, 'storeAddress'])->name('order.storeAddress');
+
     Route::get('/order/confirm', [OrderController::class, 'confirmOrder'])->name('order.confirm');
     Route::post('/order/place', [OrderController::class, 'placeOrder'])->name('order.place');
     Route::get('/order/success/{order}', [OrderController::class, 'orderSuccess'])->name('order.success');

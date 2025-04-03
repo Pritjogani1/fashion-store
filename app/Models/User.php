@@ -56,5 +56,8 @@ public function address()
 {
     return $this->hasMany(Address::class);
 }   
-   
+public function useraddresses()
+{
+    return $this->hasMany(useraddress::class);  
+}
 }

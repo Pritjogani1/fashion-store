@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OrderPlaced;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -20,28 +21,38 @@ class OrderController extends Controller
 
     public function checkout()
     {
-        try{
-        if (!session()->has('cart') || empty(session('cart'))) {
-            return redirect()->route('cart.show')->with('error', 'Your cart is empty');
+        try {
+            if (!session()->has('cart') || empty(session('cart'))) {
+                return redirect()->route('cart.show')->with('error', 'Your cart is empty');
+            }
+            
+            $user =  Auth::user();   
+            $addresses = $user->useraddresses;
+        
+                    
+            return view('store.checkout', compact('addresses'));
         }
-        return view('store.checkout');
+        catch(\Exception $e) {
+       
+            return back()->withErrors([
+                'message' => 'Error loading checkout: ' . $e->getMessage(),
+            ]);
+        }
     }
-    catch(\Exception $e) {
-        return back()->withErrors([
-           'message' => 'An error occurred while fetching the user.',
-        ]);
-    }
-}
 
     public function storeAddress(OrderAddressRequest $request)
     {
+       
+    
         try {
+          
             $validatedData = $request->validated();
+
             $address = $this->orderService->storeAddress($validatedData);
             return redirect()->route('order.confirm');
         } catch(\Exception $e) {
             return back()->withErrors([
-                'message' => 'An error occurred while storing the address.',
+                'message' => 'Error saving address: ' . $e->getMessage(),
             ]);
         }
     }
@@ -77,7 +88,7 @@ class OrderController extends Controller
                 return redirect()->route('cart.show')->with('error', 'Your cart is empty');
               
             }
-
+            
             if (!session()->has('checkout_address')) {
                
                 return redirect()->route('checkout')->with('error', 'Please provide shipping address');
@@ -100,7 +111,8 @@ class OrderController extends Controller
     public function orderSuccess($orderId)
     {
         try{
-        $order = Order::with('items')->findOrFail($orderId);
+        $order = Order::with('items','address')->findOrFail($orderId);
+          
         event(new OrderPlaced($order));
         return view('store.order-success', compact('order'));
         }

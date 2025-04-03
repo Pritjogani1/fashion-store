@@ -14,6 +14,7 @@
                     <!-- Shipping Details -->
                     <div class="border rounded-lg p-4">
                         <h3 class="font-semibold mb-2">Shipping Details</h3>
+                       
                         <p>{{ $order->address->full_name }}</p>
                         <p>{{ $order->address->address_line }}</p>
                         <p>{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->pincode }}</p>

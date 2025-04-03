@@ -39,11 +39,11 @@
                     <x-nav-link href="/" :active="request()->is('/')" class="text-white hover:text-gray-200 font-semibold">Home</x-nav-link>
                     <x-nav-link href="/about" :active="request()->is('about')" class="text-white hover:text-gray-200 font-semibold">About</x-nav-link>
                     
-                    <!-- Enhanced Products Dropdown -->
-                    <!-- Replace the existing Products Dropdown section -->
+               
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" @click.away="open = false" 
-                                class="flex items-center px-4 py-2 text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors duration-200">
+                        <button @click="open = !open" 
+                                @click.away="open = false"
+                                class="flex items-center px-4 py-2 text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span>Products</span>
                             <svg class="w-5 h-5 ml-2 transform transition-transform duration-200" 
                                  :class="{'rotate-180': open}"

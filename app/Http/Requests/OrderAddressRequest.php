@@ -14,26 +14,27 @@ class OrderAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|string|max:255',
-            'address_line' => 'required|string|max:500',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'pincode' => 'required|string|max:10',
-            'phone' => 'required|string|max:15',
-            'country' => 'required|string|max:100',
+           'address_id' =>'sometimes|integer',
+           'full_name' =>'required_if:address_id,new|string|max:255',
+           'address_line' => 'required_if:address_id,new|string|max:255',
+            'city' => 'required_if:address_id,new|string|max:255',
+            'state' => 'required_if:address_id,new|string|max:255',
+            'pincode' => 'required_if:address_id,new|string|max:10',
+            'country' => 'required_if:address_id,new|string|max:255',
+            'phone' =>'required_if:address_id,new|string|max:20',
+            'set_default' => 'sometimes|boolean'
         ];
     }
 
     public function messages()
     {
         return [
-            'full_name.required' => 'Please enter your full name',
-            'address_line.required' => 'Please enter your address',
-            'city.required' => 'Please enter your city',
-            'state.required' => 'Please enter your state',
-            'pincode.required' => 'Please enter your pincode',
-            'phone.required' => 'Please enter your phone number',
-            'country.required' => 'Please enter your country',
+            'address_id.required' => 'Please select or add an address',
+            'street.required_if' => 'Street address is required',
+            'city.required_if' => 'City is required',
+            'state.required_if' => 'State is required',
+            'zip.required_if' => 'ZIP code is required',
+            'country.required_if' => 'Country is required',
         ];
     }
 }

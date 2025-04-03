@@ -7,11 +7,16 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Address;
+use App\Models\create_shipping_address;
+use App\Models\useraddress;
+use PhpParser\Builder\UseTest;
+use PhpParser\Node\Expr\AssignOp\ShiftLeft;
 
 class OrderService
 {
     public function storeAddress($data)
     {
+        
         Session::put('checkout_address', $data);
         return $data;
     }
@@ -27,19 +32,23 @@ class OrderService
 
     public function createOrder()
     {
+        
        
         $cart = Session::get('cart', []);
         $address = Session::get('checkout_address');
         $user = Auth::user();
-       
         $order = Order::create([
             'user_id' => $user->id,
             'total' => $this->calculateCartTotal($cart),
             'status' => 'pending',
         ]);
-       
+     
+        
+  if(empty($address['address_id'])) {
     
-        $address = Address::create([
+    if( $address['set_default'] === "1"){
+        // Create a new address for the user and associate it with the order
+        $address = useraddress::create([
             'user_id' => $user->id,
             'full_name' => $address['full_name'],
             'address_line' => $address['address_line'],
@@ -49,9 +58,51 @@ class OrderService
             'phone' => $address['phone'],
             'country' => $address['country'],
             'type' => 'shipping',
-            'order_id' => $order->id,
         ]);
+        $data = $address->toArray();
+        unset($data['id']);
+
+    }
+    
+        $addresses = Address::create([
+            'user_id' => $user->id,
+            'order_id' => $order->id,
+            'full_name' => $address['full_name'],
+            'address_line' => $address['address_line'],
+            'city' => $address['city'],
+            'state' => $address['state'],
+            'pincode' => $address['pincode'],
+            'phone' => $address['phone'],
+            'country' => $address['country'],
+            'type' =>'shipping',
+
+        ]);
+        $data = $addresses->toArray();
+        unset($data['id']);   
+    }
+      else
+      {
+        
+            $address = useraddress::find($address['address_id']);
+            $addresses = Address::create([
+                'user_id' => $user->id,
+                'order_id' => $order->id,
+                'full_name' => $address['full_name'],
+                'address_line' => $address['address_line'],
+                'city' => $address['city'],
+                'state' => $address['state'],
+                'pincode' => $address['pincode'],
+                'phone' => $address['phone'],
+                'country' => $address['country'],
+                'type' =>'shipping',
+
+            ]);
+            
+            $data = $addresses->toArray();
+            unset($data['id']);
+      }
       
+
        
 
         foreach ($cart as $item) {
@@ -65,7 +116,6 @@ class OrderService
             ]);
           
         }
-
         return $order;
     }
 

@@ -7,14 +7,14 @@
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h3 class="text-xl font-semibold mb-4">Shipping Address</h3>
                     <div class="text-gray-600">
-                
+{{--                 
                         <p class="font-medium">{{$data['address_line']['full_name'] }}</p>
                         <p>{{ $data['address_line']['address_line'] }}</p>
                         <p>{{ $data['address_line']['city'] }}, {{ $data['address_line']['state'] }}
                             {{ $data['address_line']['country'] }}
                         </p>
                         <p>PIN: {{ $data['address_line']['pincode'] }}</p>
-                        <p>Phone: {{ $data['address_line']['phone'] }}</p>
+                        <p>Phone: {{ $data['address_line']['phone'] }}</p> --}}
                         <div>
                      
                     </div>
