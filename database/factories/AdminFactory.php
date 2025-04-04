@@ -21,7 +21,7 @@ class AdminFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => bcrypt('12345678'),
-            'role' => $this->faker->randomElement(['super_admin', 'admin', 'moderator']),
+            'role_id' => 1,
             //
         ];
     }

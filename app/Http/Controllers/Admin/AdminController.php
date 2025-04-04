@@ -15,6 +15,7 @@ class AdminController extends Controller
 {
 
     public function index() {
+        
         return view("admin.admin-loginpage");
     }
     public function dashboard() {
@@ -37,6 +38,7 @@ class AdminController extends Controller
     public function authenticate(Request $request) {
   
         try {
+            
             $credentials = $request->only(["email", "password"]);
             
             if(Auth::guard("admin")->attempt($credentials)) {
@@ -50,6 +52,7 @@ class AdminController extends Controller
             ])->onlyInput('email');
         }
         catch(\Exception $e) {
+           
             return back()->withErrors([
                 'message' => 'An error occurred while authenticating the user.',
             ]);
@@ -105,6 +108,7 @@ public function editUser($id)
         return back()->withErrors([
             'message' => 'An error occurred while fetching the user.',
         ]);
+        
     }
 }
 

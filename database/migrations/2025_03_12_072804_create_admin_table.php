@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-             $table->enum('role', ['super_admin', 'admin', 'moderator'])->default('admin');
+            $table->unsignedBigInteger("role_id")->nullable();
+            $table->foreign("role_id")->references("id")->on("roles")->nullOnDelete();
              $table->timestamps();
         //$table->foreignId('role_id')->constrained('roles')->default('admin')->onDelete('cascade');
            

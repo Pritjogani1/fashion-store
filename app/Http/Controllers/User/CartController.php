@@ -135,7 +135,7 @@ class CartController extends Controller
         return response()->json([
            'success' => false,
            'message' => 'An error occurred while clearing the cart.'
-                    ]);     
+   ]);     
                 }
     }
 }

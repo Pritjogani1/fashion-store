@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Admin Dashboard' }}</title>
+    <script src="https://kit.fontawesome.com/20f5d418fc.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/toasty.js@1.0.1/dist/toasty.min.js"></script>
@@ -19,6 +20,7 @@
                     <h1 class="text-2xl font-bold text-white">Admin Panel</h1>
                 </div>
                 <ul class="space-y-3">
+                    @can('dashboard')
                     <li>
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center py-2 px-4 rounded hover:bg-gray-800 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-800' : '' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,6 +29,7 @@
                             Dashboard
                         </a>
                     </li>
+                    @endcan
                     <li>
                         <a href="{{ route('admin.products') }}" class="flex items-center py-2 px-4 rounded hover:bg-gray-800 {{ request()->routeIs('admin.products') ? 'bg-gray-800' : '' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,6 +38,7 @@
                             Products
                         </a>
                     </li>
+                    @can('categories')
                     <li>
                         <a href="{{ route('admin.categories.index') }}" class="flex items-center py-2 px-4 rounded hover:bg-gray-800 {{ request()->routeIs('admin.categories.*') ? 'bg-gray-800' : '' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,6 +47,7 @@
                             Categories
                         </a>
                     </li>
+                    @endcan
                     <li>
                         <a href="{{ route('admin.orders') }}" class="flex items-center py-2 px-4 rounded hover:bg-gray-800 {{ request()->routeIs('admin.orders') ? 'bg-gray-800' : '' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +73,32 @@
                             Static Blocks
                         </a>
                     </li>
-                </ul>
+              
+                
+<li>
+    <a href="/admin/static-pages"
+       class="flex items-center py-2 px-4 rounded hover:bg-gray-800 {{ request()->routeIs('admin.static-pages.*') ? 'bg-gray-800' : '' }}">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Static Pages
+    </a>
+</li>
+<a href="{{ route('admin.admins.index') }}" :active="request()->is('admins*')"
+    class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+    <i class="fas fa-users mr-3"></i>
+    <span>Admins</span>
+</a>
+<a href="{{ route('admin.role') }}" :active="request()->is('admin/role*')"
+    class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+    <i class="fas fa-users mr-3"></i>
+    <span>Roles</span>
+</a>
+<a href="{{ route('admin.permission') }}" :active="request()->is('admin/permission*')"
+    class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+    <i class="fas fa-users mr-3"></i>
+    <span>Permissions</span>
+</a>
 
                 <!-- Logout Button -->
                 <div class="absolute bottom-0 left-0 w-full p-6">

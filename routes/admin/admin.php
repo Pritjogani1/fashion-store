@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StaticBlockController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\AuthAdminController; 
+use App\Http\Controllers\Admin\PermissionController;
+
+
 
 use Illuminate\Support\Str;
 
@@ -19,8 +24,47 @@ Route::prefix("admin")->group(function() {
 
     // Authenticated routes
     Route::middleware("auth:admin")->group(function() {
-        Route::get("/dashboard", [AdminController::class, "dashboard"])->name("admin.dashboard");
+        Route::get("/dashboard", [AdminController::class, "dashboard"])->name("admin.dashboard")->can('dashboard');
         Route::get("logout", [AdminController::class, "logout"])->name("admin.logout");
+        
+
+ 
+        Route::prefix('admins')->group(function(){
+            Route::get('/',[AuthAdminController::class,'index'])->name('admin.admins.index');
+
+            Route::get('/create',[AuthAdminController::class,'create'])->name('admin.admins.create');
+            Route::post('/create',[AuthAdminController::class,'store'])->name('admin.admins.store');
+
+            Route::get('/{admin}/edit',[AuthAdminController::class,'edit'])->name('admin.admins.edit');
+            Route::patch('/{admin}/update',[AuthAdminController::class,'update'])->name('admin.admins.update');
+            Route::delete('/{admin}/delete',[AuthAdminController::class,'destroy'])->name('admin.admins.destroy');
+        });
+
+        Route::prefix('role')->group(function(){
+            Route::get('/',[RoleController::class,'index'])->name('admin.role');
+
+            Route::get('/create',[RoleController::class,'create'])->name('admin.role.create');
+            Route::post('/create',[RoleController::class,'store'])->name('admin.role.store');
+
+            Route::get('/{role}/edit',[RoleController::class,'edit'])->name('admin.role.edit');
+            Route::patch('/{role}/update',[RoleController::class,'update'])->name('admin.role.update');
+
+            Route::delete('/{role}/delete',[RoleController::class,'destroy'])->name('admin.role.destroy');
+        });
+        
+        Route::prefix('permission')->group(function(){
+            Route::get('/',[PermissionController::class,'index'])->name('admin.permission');
+
+            Route::get('/create',[PermissionController::class,'create'])->name('admin.permission.create');
+            Route::post('/create',[PermissionController::class,'store'])->name('admin.permission.store');
+
+            Route::get('/{permission}/edit',[PermissionController::class,'edit'])->name('admin.permission.edit');
+            Route::patch('/{permission}/update',[PermissionController::class,'update'])->name('admin.permission.update');
+
+            Route::delete('/{permission}/delete',[PermissionController::class,'destroy'])->name('admin.permission.destroy');
+        });
+        
+    
         
         // Users management
         Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteuser');
@@ -34,7 +78,7 @@ Route::prefix("admin")->group(function() {
         Route::post('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
 
         // Categories management
-        Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+        Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index')->can('categories');
         Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
         Route::put('/admin/categories/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
         Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
